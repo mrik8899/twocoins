@@ -1,39 +1,42 @@
-// src/components/ErrorBoundary.tsx
-import React, { Component, ErrorInfo, type ReactNode } from 'react'; // ✅ FIX: Use type-only import for ReactNode
+'use client';
 
-interface Props {
+import { Component, type ReactNode } from "react";
+import type { ErrorInfo } from "react";
+
+interface ErrorBoundaryProps {
   children: ReactNode;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false,
-  };
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
-  public static getDerivedStateFromError(_: Error): State {
+  static getDerivedStateFromError(_: Error) {
     return { hasError: true };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // You can log error here
+    console.error("ErrorBoundary caught an error", error, errorInfo);
   }
 
-  public render() {
+  render() {
     if (this.state.hasError) {
       return (
-        <div className="text-center py-20 text-red-400">
+        <div className="text-center text-red-500 py-10">
           <h2>Something went wrong.</h2>
-          <p>Please try refreshing the page.</p>
+          <p>Please refresh the page or contact support.</p>
         </div>
       );
-    } // ✅ FIX: The missing '}' was here
-
+    }
     return this.props.children;
   }
 }
 
-export default ErrorBoundary; // ✅ FIX: Added the missing default export
+export default ErrorBoundary;
