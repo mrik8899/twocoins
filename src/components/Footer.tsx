@@ -24,8 +24,8 @@ const socialLinks = [
 const contactInfo = [
   {
     icon: Phone,
-    text: "+63 912 345 6789",
-    href: "tel:+639123456789",
+    text: "+63 939 213 6599",
+    href: "tel:+639392136599",
   },
   {
     icon: Mail,
@@ -34,7 +34,7 @@ const contactInfo = [
   },
   {
     icon: MapPin,
-    text: "Davao, Philippines",
+    text: "Astorga Sta. Cruz Davao Del Sur, Philippines.",
     href: "https://maps.google.com/?q=Davao, Philippines",
   },
 ];

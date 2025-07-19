@@ -51,10 +51,17 @@ const ContactSection = () => {
       id="contact"
       className="relative scroll-mt-20 pt-20 pb-16 min-h-screen transition-colors duration-300 overflow-hidden"
     >
-      {/* Blobs and vertical gradient overlay identical to Features */}
+      {/* Background image, blobs, and vertical gradient overlay */}
+      <img
+        src="/contact-us-image.jpg"
+        alt="Contact Us"
+        className="absolute inset-0 w-full h-full object-cover object-center z-0"
+        style={{ filter: "brightness(0.55)" }}
+      />
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute top-1/4 left-1/4 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
+        {/* Vertical gradient identical to Features */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/60"></div>
       </div>
 
@@ -75,20 +82,20 @@ const ContactSection = () => {
                   rel="noopener noreferrer"
                   className="hover:underline"
                 >
-                  Davao City, Philippines
+                  Astorga Sta. Cruz Davao Del Sur, Philippines
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-6 h-6 text-yellow-400" />
-                <a href="tel:+639175682595" className="hover:underline">
-                  +63 917 568 2595{" "}
+                <a href="tel:+639392136599" className="hover:underline">
+                  +63 939 213 6599{" "}
                   <span className="text-xs text-gray-200">(Globe)</span>
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-6 h-6 text-yellow-400" />
-                <a href="tel:+639338682888" className="hover:underline">
-                  +63 933 868 2888{" "}
+                <a href="tel:+639392136599" className="hover:underline">
+                  +63 939 213 6599{" "}
                   <span className="text-xs text-gray-200">(Smart/Sun)</span>
                 </a>
               </li>

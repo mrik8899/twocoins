@@ -4,11 +4,12 @@ import Header from './components/Header';
 import NewHeroSection from './components/NewHeroSection';
 import ImageCarousel from './components/ImageCarousel';
 import AboutUsSection from './components/AboutUsSection';
+import TestimonialsSection from './components/TestimonialsSection';
 import FeaturesSection from './components/FeaturesSection';
 import InventoryPage from './pages/InventoryPage';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
-import ThemeToggle from './components/ThemeToggle';
+
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <FeaturesSection />
         <InventoryPage />
         <AboutUsSection />
+        <TestimonialsSection />
         <ContactSection />
       </main>
      <Footer />
