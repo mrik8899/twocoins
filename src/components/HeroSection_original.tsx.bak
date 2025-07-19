@@ -1,0 +1,514 @@
+import { useRef, useLayoutEffect, useEffect, useState } from "react";
+import { gsap } from "gsap";
+
+const LOGO_SIZE_DESKTOP = 110;
+const LOGO_SIZE_SMALL_DESKTOP = 44;
+const LOGO_SIZE_MOBILE = 60;
+const LOGO_SIZE_SMALL_MOBILE = 22;
+const MOBILE_BREAKPOINT = 640;
+const DROP_DURATION = 2.3;
+const DROP_EASE = "bounce.out";
+const FLOOR_OFFSET_DESKTOP = 120;
+const FLOOR_OFFSET_MOBILE = 50;
+const HEADER_HEIGHT_DESKTOP = 80;
+const HEADER_HEIGHT_MOBILE = 64;
+const LOGO_BOUNCE_Y = -22;
+const TRUCK_EXIT_DISTANCE = 350;
+const TRUCK_EXIT_DURATION = 2.4;
+const TRUCK_SCROLL_TRIGGER = 0;
+const TRUCK_SCROLL_MAX = 1000;
+
+export default function HeroSection() {
+  const logo1Ref = useRef<HTMLImageElement>(null);
+  const logo2Ref = useRef<HTMLImageElement>(null);
+  const truckLeftRef = useRef<HTMLDivElement>(null);
+  const truckRightRef = useRef<HTMLDivElement>(null);
+
+  const floatTween1 = useRef<gsap.core.Tween | null>(null);
+  const floatTween2 = useRef<gsap.core.Tween | null>(null);
+
+  const [LOGO_SIZE_BIG, setLogoSizeBig] = useState(
+    typeof window !== "undefined" && window.innerWidth < MOBILE_BREAKPOINT
+      ? LOGO_SIZE_MOBILE
+      : LOGO_SIZE_DESKTOP
+  );
+  const [LOGO_SIZE_SMALL, setLogoSizeSmall] = useState(
+    typeof window !== "undefined" && window.innerWidth < MOBILE_BREAKPOINT
+      ? LOGO_SIZE_SMALL_MOBILE
+      : LOGO_SIZE_SMALL_DESKTOP
+  );
+  const [FLOOR_OFFSET, setFloorOffset] = useState(() => {
+    if (typeof window !== "undefined" && window.innerWidth < MOBILE_BREAKPOINT) {
+      return FLOOR_OFFSET_MOBILE + HEADER_HEIGHT_MOBILE;
+    }
+    return FLOOR_OFFSET_DESKTOP + HEADER_HEIGHT_DESKTOP;
+  });
+
+  const [isDark, setIsDark] = useState(() =>
+    typeof window !== "undefined"
+      ? document.documentElement.classList.contains("dark")
+      : false
+  );
+  useEffect(() => {
+    const updateTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+    updateTheme();
+    window.addEventListener("storage", updateTheme);
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    mq.addEventListener("change", updateTheme);
+    window.addEventListener("theme-toggle", updateTheme);
+    return () => {
+      window.removeEventListener("storage", updateTheme);
+      mq.removeEventListener("change", updateTheme);
+      window.removeEventListener("theme-toggle", updateTheme);
+    };
+  }, []);
+
+  function startFloating() {
+    if (logo1Ref.current) {
+      if (floatTween1.current) floatTween1.current.kill();
+      floatTween1.current = gsap.to(logo1Ref.current, {
+        y: LOGO_BOUNCE_Y - 8,
+        repeat: -1,
+        yoyo: true,
+        duration: 2.2,
+        ease: "power1.inOut",
+        delay: 0.0,
+      });
+    }
+    if (logo2Ref.current) {
+      if (floatTween2.current) floatTween2.current.kill();
+      floatTween2.current = gsap.to(logo2Ref.current, {
+        y: LOGO_BOUNCE_Y - 18,
+        repeat: -1,
+        yoyo: true,
+        duration: 3.1,
+        ease: "power1.inOut",
+        delay: 0.4,
+      });
+    }
+  }
+
+  function killFloating() {
+    if (floatTween1.current) {
+      floatTween1.current.kill();
+      floatTween1.current = null;
+    }
+    if (floatTween2.current) {
+      floatTween2.current.kill();
+      floatTween2.current = null;
+    }
+    if (logo1Ref.current && logo2Ref.current) {
+      gsap.set([logo1Ref.current, logo2Ref.current], { y: 0 });
+    }
+  }
+  
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      setLogoSizeBig(isMobile ? LOGO_SIZE_MOBILE : LOGO_SIZE_DESKTOP);
+      setLogoSizeSmall(isMobile ? LOGO_SIZE_SMALL_MOBILE : LOGO_SIZE_SMALL_DESKTOP);
+      setFloorOffset(
+        isMobile
+          ? FLOOR_OFFSET_MOBILE + HEADER_HEIGHT_MOBILE
+          : FLOOR_OFFSET_DESKTOP + HEADER_HEIGHT_DESKTOP
+      );
+    };
+
+    function runInitialDropAndFloat() {
+        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        if (mediaQuery.matches) {
+          killFloating();
+          if (logo1Ref.current) gsap.set(logo1Ref.current, { y: 0 });
+          if (logo2Ref.current) gsap.set(logo2Ref.current, { y: 0 });
+          return;
+        }
+        function getPositions() {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
+          const floor = h - FLOOR_OFFSET;
+          const overlapCenter =
+            w / 2 - LOGO_SIZE_BIG / 2 - (w < MOBILE_BREAKPOINT ? 0 : 8);
+          const logoLeftOutX = 0;
+          const SCROLLBAR_SAFE = 8;
+          const logoRightOutX = w - LOGO_SIZE_SMALL - SCROLLBAR_SAFE;
+          return { w, h, floor, overlapCenter, logoLeftOutX, logoRightOutX };
+        }
+    
+        const { floor, overlapCenter } = getPositions();
+    
+        killFloating();
+    
+        if (logo1Ref.current && logo2Ref.current) {
+          gsap.set(logo1Ref.current, {
+            position: "fixed",
+            left: overlapCenter + 6,
+            top: -LOGO_SIZE_BIG * 2,
+            width: LOGO_SIZE_BIG,
+            height: LOGO_SIZE_BIG,
+            zIndex: 998,
+            pointerEvents: "auto",
+            opacity: 1,
+            y: 0,
+          });
+          gsap.set(logo2Ref.current, {
+            position: "fixed",
+            left: overlapCenter +6,
+            top: -LOGO_SIZE_BIG * 2,
+            width: LOGO_SIZE_BIG,
+            height: LOGO_SIZE_BIG,
+            zIndex: 999,
+            pointerEvents: "auto",
+            opacity: 1,
+            y: 0,
+          });
+    
+          gsap.to([logo1Ref.current, logo2Ref.current], {
+            top: floor,
+            duration: DROP_DURATION,
+            ease: DROP_EASE,
+            stagger: 0.13,
+            onComplete: () => {
+              gsap.to(logo1Ref.current, {
+                y: LOGO_BOUNCE_Y,
+                duration: 0.5,
+                ease: "power1.out",
+                yoyo: true,
+                repeat: 1,
+                onComplete: startFloating,
+              });
+              gsap.to(logo2Ref.current, {
+                y: LOGO_BOUNCE_Y,
+                duration: 0.6,
+                ease: "power1.out",
+                yoyo: true,
+                repeat: 1,
+                delay: 0.3,
+              });
+            },
+          });
+        }
+    }
+
+    handleResize();
+    runInitialDropAndFloat();
+
+    function handleScroll() {
+        function getPositions() {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
+          const floor = h - FLOOR_OFFSET;
+          const overlapCenter =
+            w / 2 - LOGO_SIZE_BIG / 2 - (w < MOBILE_BREAKPOINT ? 0 : 8);
+          const logoLeftOutX = 0;
+          const SCROLLBAR_SAFE = 8;
+          const logoRightOutX = w - LOGO_SIZE_SMALL - SCROLLBAR_SAFE;
+          return { w, h, floor, overlapCenter, logoLeftOutX, logoRightOutX };
+        }
+  
+        const scrollY = window.scrollY;
+        const trigger = 100;
+        const maxScroll = 320;
+        let t = (scrollY - trigger) / (maxScroll - trigger);
+        t = Math.max(0, Math.min(t, 1));
+        const truckT =
+          (scrollY - TRUCK_SCROLL_TRIGGER) /
+          (TRUCK_SCROLL_MAX - TRUCK_SCROLL_TRIGGER);
+        const truckTClamped = Math.max(0, Math.min(truckT, 1));
+        const { w, floor, overlapCenter, logoLeftOutX, logoRightOutX } =
+          getPositions();
+  
+        const logoMiddle = window.innerHeight / 2 - LOGO_SIZE_SMALL / 2;
+  
+        if (logo1Ref.current && logo2Ref.current) {
+          gsap.to(logo1Ref.current, {
+            left: (1 - t) * (overlapCenter + 6) + t * logoLeftOutX,
+            top: (1 - t) * floor + t * logoMiddle,
+            width: (1 - t) * LOGO_SIZE_BIG + t * LOGO_SIZE_SMALL,
+            height: (1 - t) * LOGO_SIZE_BIG + t * LOGO_SIZE_SMALL,
+            opacity: 1,
+            zIndex: t < 0.5 ? 998 : 999,
+            y: t > 0 ? 0 : undefined,
+            duration: 0.5,
+            overwrite: true,
+          });
+          gsap.to(logo2Ref.current, {
+            left: (1 - t) * (overlapCenter +6) + t * logoRightOutX,
+            top: (1 - t) * floor + t * logoMiddle,
+            width: (1 - t) * LOGO_SIZE_BIG + t * LOGO_SIZE_SMALL,
+            height: (1 - t) * LOGO_SIZE_BIG + t * LOGO_SIZE_SMALL,
+            opacity: 1,
+            zIndex: t < 0.5 ? 999 : 998,
+            y: t > 0 ? 0 : undefined,
+            duration: 0.5,
+            overwrite: true,
+          });
+  
+          if (t > 0) {
+            killFloating();
+          } else {
+            killFloating();
+            startFloating();
+          }
+        }
+  
+        if (truckLeftRef.current && truckRightRef.current) {
+          if (scrollY <= TRUCK_SCROLL_TRIGGER) {
+            gsap.set(truckLeftRef.current, { x: 0, opacity: 1 });
+            gsap.set(truckRightRef.current, { x: 0, opacity: 1 });
+          } else {
+            gsap.to(truckLeftRef.current, {
+              x: -truckTClamped * (w / 2 + TRUCK_EXIT_DISTANCE),
+              opacity: 1 - truckTClamped,
+              duration: TRUCK_EXIT_DURATION,
+              overwrite: true,
+              ease: "power2.inOut",
+            });
+            gsap.to(truckRightRef.current, {
+              x: truckTClamped * (w / 2 + TRUCK_EXIT_DISTANCE),
+              opacity: 1 - truckTClamped,
+              duration: TRUCK_EXIT_DURATION,
+              overwrite: true,
+              ease: "power2.inOut",
+            });
+          }
+        }
+    }
+    
+    const onResizeAndScroll = () => {
+      handleResize();
+      handleScroll();
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", onResizeAndScroll);
+    window.addEventListener("orientationchange", onResizeAndScroll);
+
+    setTimeout(() => {
+      if (window.scrollY < 100) startFloating();
+      handleScroll();
+    }, DROP_DURATION * 800);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", onResizeAndScroll);
+      window.removeEventListener("orientationchange", onResizeAndScroll);
+      killFloating();
+    };
+  }, [LOGO_SIZE_BIG, LOGO_SIZE_SMALL, FLOOR_OFFSET]);
+
+  const gradientTextStyle = {
+    WebkitBackgroundClip: "text",
+    backgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    color: "transparent",
+  };
+
+  return (
+    <section id="home" className="relative pt-28 sm:pt-28 max-sm:pt-20 pb-24 text-center overflow-x-hidden min-h-screen">
+      <img
+        src="/hero-background.jpg"
+        alt=""
+        aria-hidden="true"
+        // ✅ FIX: The negative z-index is removed. This keeps the image inside the section.
+        className="absolute inset-0 w-full h-full object-cover"
+         style={{
+      opacity: isDark ? 0.7 : 1,
+      transition: "opacity 0.3s",
+    }}
+      />
+      <div className="absolute inset-0 animated-gradient-overlay"></div>
+
+      <img
+        ref={logo1Ref}
+        src="/logo1.png"
+        alt="Logo 1"
+        loading="lazy"
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: LOGO_SIZE_BIG,
+          height: LOGO_SIZE_BIG,
+          pointerEvents: "auto",
+          zIndex: 998,
+          opacity: 1,
+        }}
+      />
+      <img
+        ref={logo2Ref}
+        src="/logo2.png"
+        alt="Logo 2"
+        loading="lazy"
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: LOGO_SIZE_BIG,
+          height: LOGO_SIZE_BIG,
+          pointerEvents: "auto",
+          zIndex: 999,
+          opacity: 1,
+        }}
+      />
+
+      <div className="max-w-5xl mx-auto px-6 relative z-10 mt-0">
+        <div className="glassmorphism inline-block px-8 py-6 rounded-2xl mx-auto mb-1 max-sm:px-4 max-sm:py-1">
+          <div className="mt-2 mb-5 max-sm:mt-0">
+            <h1
+              className="font-headline text-6xl max-sm:text-2xl font-extrabold tracking-tight leading-[1.05] uppercase animate-shimmer mb-2 text-shadow-strong text-gradient-gold"
+              style={gradientTextStyle}
+            >
+              Japan Direct Importer
+            </h1>
+            <h1
+              className="text-4xl font-bold animate-fade-in mb-2 max-sm:hidden text-gradient-gold"
+              style={gradientTextStyle}
+            >
+              Trusted Partner for Quality Multicab Vans & Trucks
+            </h1>
+            <h1
+              className="text-lg font-bold animate-fade-in mb-2 sm:hidden text-gradient-gold"
+              style={gradientTextStyle}
+            >
+              Quality Multicab Vans & Trucks
+            </h1>
+            <p
+              className="mt-4 mb-6 text-lg animate-fade-in max-sm:hidden text-gradient-gold"
+              style={gradientTextStyle}
+            >
+              TwoCoins offers a wide selection of top-quality mini vans, trucks,
+              and heavy equipment, sourced directly from Japan. Your reliable
+              wholesale partner.
+            </p>
+            <p
+              className="mt-2 mb-3 text-base animate-fade-in sm:hidden text-gradient-gold"
+              style={gradientTextStyle}
+            >
+              Surplus from Japan
+            </p>
+          </div>
+          <div className="flex flex-row items-center justify-center gap-5 z-20 bg-transparent mb-1">
+            <a
+              href="#inventory"
+              className="bg-primary-600 hover:bg-primary-700 text-dark-900 font-bold w-72 py-3 rounded-full transition-colors flex justify-center items-center space-x-2 group max-sm:w-36 max-sm:py-2 max-sm:text-xs"
+            >
+              <span>Inventory</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-arrow-right w-5 h-5 group-hover:translate-x-1 transition-transform"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </a>
+            <a
+              href="#"
+              className="border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-dark-900 font-bold w-72 py-3 rounded-full transition-colors flex justify-center items-center space-x-2 group max-sm:w-36 max-sm:py-2 max-sm:text-xs"
+            >
+              <span>Quote</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-book-open w-5 h-5 group-hover:translate-x-1 transition-transform"
+                aria-hidden="true"
+              >
+                <path d="M12 7v14"></path>
+                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div
+          className="
+          flex flex-row justify-center items-end gap-0 -mx-0 mt-2 select-none pointer-events-none 
+          max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:mx-0
+          "
+        >
+          <div
+            ref={truckLeftRef}
+            className="
+               relative w-[680px] h-[370px] rounded-[28px] overflow-visible bg-transparent flex-shrink-0 pointer-events-auto
+                max-sm:w-[90vw] max-sm:max-w-[340px] max-sm:h-[140px]
+              "
+            style={{ willChange: "transform, opacity" }}
+          >
+            <video
+              src="/tccvideo1.mp4"
+              autoPlay
+              loop
+              muted
+              aria-hidden="true"
+              tabIndex={-1}
+              className="
+                absolute top-[10px] left-[290px] w-[320px] h-[190px] object-cover rounded-[20px] z-20 shadow-lg
+                max-sm:top-[-5px] max-sm:left-[110px] max-sm:w-[175px] max-sm:h-[100px]
+              "
+            />
+
+            <img
+              alt="Truck Left"
+              loading="lazy"
+              aria-hidden="true"
+              className="
+                   absolute bottom-[10px] left-[30px] w-[780px] h-[420px] object-contain z-10
+                    max-sm:bottom-[-50px] max-sm:left-[-12px] max-sm:w-[330px] max-sm:h-[250px]
+                  "
+              src="/truck-left.png"
+            />
+          </div>
+          <div
+            ref={truckRightRef}
+            className="
+              relative w-[680px] h-[370px] rounded-[20px] overflow-visible bg-transparent flex-shrink-0 pointer-events-auto
+              max-sm:w-[90vw] max-sm:max-w-[340px] max-sm:h-[140px]
+            "
+            style={{ willChange: "transform, opacity" }}
+          >
+            <video
+              src="/tccvideo2.mp4"
+              autoPlay
+              loop
+              muted
+              aria-hidden="true"
+              tabIndex={-1}
+              className="
+                absolute top-[10px] right-[290px] w-[320px] h-[190px] object-cover rounded-[20px] z-20 shadow-lg
+                max-sm:top-[-5px] max-sm:right-[110px] max-sm:w-[175px] max-sm:h-[100px]
+              "
+            />
+            <img
+              alt="Truck Right"
+              loading="lazy"
+              aria-hidden="true"
+              className="
+                absolute bottom-[10px] right-[30px] w-[780px] h-[420px] object-contain z-10
+                max-sm:bottom-[-50px] max-sm:right-[-12px] max-sm:w-[330px] max-sm:h-[250px]
+              "
+              src="/truck-right.png"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

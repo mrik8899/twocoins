@@ -1,0 +1,28 @@
+// src/pages/VehicleDetailPage.tsx
+import { useParams } from 'react-router-dom';
+import { vehicleData } from '../data/vehicles'; // ✅ FIX: Correct path
+import type { Vehicle } from '../types/vehicle'; // ✅ FIX: Correct path and type-only import
+
+export default function VehicleDetailPage() {
+  const { id } = useParams<{ id: string }>();
+
+  // ✅ FIX: 'v' is now correctly typed because vehicleData has a type
+  const vehicle: Vehicle | undefined = vehicleData.find((v) => v.id === id);
+
+  if (!vehicle) {
+    return <div className="p-10 text-center text-xl text-red-500">Vehicle not found.</div>;
+  }
+
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      {/* ✅ FIX: Use 'name' and 'imageUrl' to match your data */}
+      <h1 className="text-3xl font-bold mb-4">{vehicle.name}</h1>
+      <img src={vehicle.imageUrl} alt={vehicle.name} className="w-full max-w-lg mx-auto rounded-lg shadow-lg mb-6" />
+      <div className="space-y-2 text-lg">
+        <p><strong>Price:</strong> {vehicle.price}</p>
+        <p><strong>Status:</strong> {vehicle.status}</p>
+        {vehicle.description && <p className="mt-4"><strong>Description:</strong> {vehicle.description}</p>}
+      </div>
+    </div>
+  );
+}

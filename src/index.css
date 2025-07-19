@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@700;800&family=Outfit:wght@700;800&family=Inter:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(14px);}
+  100% { opacity: 1; transform: none;}
+}
+.animate-fade-in { animation: fadeInUp 1s cubic-bezier(.33,.98,.53,.97) both; }
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animated-gradient-overlay {
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255, 224, 102, 0.42), rgba(255, 215, 0, 0.29) 40%, rgba(255, 249, 196, 0.21) 70%, rgba(181, 157, 0, 0.33) 100%);
+  background-size: 300% 300%;
+  animation: gradientMove 12s ease-in-out infinite;
+  mix-blend-mode: soft-light;
+  opacity: 0.8;
+}
+/* DARK MODE OVERRIDE FOR OVERLAY */
+.dark .animated-gradient-overlay {
+  background: linear-gradient(120deg, #161B22cc 0%, #232a39cc 100%);
+  opacity: 0.92;
+  mix-blend-mode: normal;
+}
+
+/* Modern Button */
+.button-modern {
+  @apply px-6 py-3 rounded-lg font-bold shadow-md bg-yellow-400 bg-gradient-to-tr from-yellow-300 to-yellow-500 text-gray-900 transition-all duration-200;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  will-change: transform, box-shadow;
+}
+.button-modern:hover, .button-modern:focus-visible {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 24px 0 rgba(255,215,0,0.25);
+  background-position: right;
+}
+.button-modern:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px 0 rgba(255,215,0,0.12);
+}
+
+/* Modern Card */
+.card-modern {
+  @apply rounded-xl bg-white/80 shadow-md transition-all duration-200;
+  will-change: transform, box-shadow;
+}
+.card-modern:hover, .card-modern:focus-within {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 8px 32px 0 rgba(255,215,0,0.16);
+}
+
+/* Glassmorphism */
+.glassmorphism {
+  background: rgba(20, 20, 20, 0.56);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 1.5rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+}
+/* DARK MODE OVERRIDE FOR GLASS */
+.dark .glassmorphism {
+  background: rgba(24, 31, 42, 0.84);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 8px 32px 0 rgba(24, 31, 42, 0.44);
+}
+
+/* Text Effects */
+.text-gradient-gold {
+  background: linear-gradient(90deg, #fff9c4 0%, #ffd700 30%, #ffe066 70%, #fffbe6 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+/* DARK MODE OVERRIDE FOR TEXT */
+.dark .text-gradient-gold {
+  background: linear-gradient(90deg, #ffe066 0%, #fffbe6 40%, #fff9c4 70%, #ffd700 100%);
+  color: transparent;
+}
+.text-outline-black {
+  -webkit-text-stroke: 2px #ffd700;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.font-headline {
+  font-family: 'Outfit', 'Clash Display', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+html, body, #root {
+  overflow-x: hidden !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+::selection {
+  background: #fff9c4;
+  color: #222;
+}
