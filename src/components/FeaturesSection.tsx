@@ -108,7 +108,7 @@ const FeaturesSection = () => {
   }, []);
 
   return (
-    <div ref={triggerRef} id="features" className="relative scroll-mt-20 ">
+    <div ref={triggerRef} id="features" className="relative scroll-mt-20">
       <section ref={sectionRef} className="relative w-full overflow-hidden flex items-start min-h-[600px]">
         <video
           ref={videoRef}
@@ -119,23 +119,22 @@ const FeaturesSection = () => {
           loop
           autoPlay
         ></video>
-        {/* Radial gradient overlay */}
-       <div
-  className="absolute inset-0 pointer-events-none"
-  style={{
-    background:
-      "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 100%)"
-  }}
-></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-500/20 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-500/20 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
-        <div ref={contentRef} className="relative w-full text-white p-4 md:p-8">
+        {/* Blobs only, no gradient overlay */}
+        <div className="pointer-events-none absolute inset-0 z-0 w-full max-w-full">
+          <div
+            className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-full max-h-full bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob"
+          ></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] max-w-full max-h-full bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000"
+          ></div>
+        </div>
+        <div ref={contentRef} className="relative w-full p-4 md:p-8">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="lg:pr-8">
-              <h2 className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg text-white">
+              <h2 className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg text-dark-900 dark:text-white text-left">
                 The <span className="text-yellow-400">TwoCoins</span> Standard.
               </h2>
-              <p className="text-xl md:text-2xl text-slate-200">
+              <p className="text-xl md:text-2xl font-light text-slate-700 dark:text-white/80 text-left">
                 It’s more than a promise. It’s the core of our operation—a foundation built on unparalleled quality, transparency, and a commitment to your success.
               </p>
             </div>
@@ -150,8 +149,8 @@ const FeaturesSection = () => {
                       <feature.icon className="w-8 h-8 text-yellow-300" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-1">{feature.title}</h3>
-                      <p className="text-slate-300">{feature.description}</p>
+                      <h3 className="text-xl font-bold text-dark-900 dark:text-white mb-1">{feature.title}</h3>
+                      <p className="text-slate-700 dark:text-slate-300">{feature.description}</p>
                     </div>
                   </div>
                 </div>
@@ -160,6 +159,16 @@ const FeaturesSection = () => {
           </div>
         </div>
       </section>
+      {/* Blob animation keyframes (if not already in your global CSS) */}
+      <style>{`
+        @keyframes blob {
+          0%, 100% { transform: scale(1) translate(0, 0); }
+          33% { transform: scale(1.1, 0.9) translate(20px, -10px); }
+          66% { transform: scale(0.9, 1.1) translate(-10px, 20px); }
+        }
+        .animate-blob { animation: blob 12s infinite linear; }
+        .animation-delay-4000 { animation-delay: 4s; }
+      `}</style>
     </div>
   );
 };

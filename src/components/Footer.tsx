@@ -42,25 +42,24 @@ const contactInfo = [
 const Footer = () => {
   return (
     <footer
-      className="relative scroll-mt-20 pt-20 pb-10 min-h-[300px] transition-colors duration-300 overflow-hidden"
+      className="relative scroll-mt-20 pt-20 pb-4 min-h-[200px] transition-colors duration-300 overflow-hidden"
     >
-      {/* Blobs and vertical gradient overlay identical to Features/Contact */}
+      {/* Blobs only, no gradient overlay */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/60"></div>
+        <div className="absolute top-0 left-0 w-[40vw] h-[40vw] max-w-[120px] max-h-[120px] md:max-w-[300px] md:max-h-[300px] bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob"></div>
+        <div className="absolute bottom-0 right-0 w-[40vw] h-[40vw] max-w-[120px] max-h-[120px] md:max-w-[300px] md:max-h-[300px] bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+      <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row md:items-start md:justify-between gap-8 w-full px-4">
         {/* Left: Brand + Slogan */}
         <div className="text-left w-full md:w-1/3">
-          <span className="text-2xl font-extrabold text-white tracking-wide">
+          <span className="text-2xl font-extrabold text-dark-900 dark:text-white tracking-wide">
             Two Coins{" "}
             <span className="text-yellow-400">
               Corporation
             </span>
           </span>
-          <p className="mt-2 text-white/90 text-base">
+          <p className="mt-2 text-dark-900 dark:text-white/90 text-base">
             Connecting you with quality vehicles, worldwide.
           </p>
         </div>
@@ -73,7 +72,7 @@ const Footer = () => {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-white hover:text-yellow-400 transition"
+              className="flex items-center gap-2 text-dark-900 dark:text-white hover:text-yellow-400 dark:hover:text-yellow-400 transition"
               aria-label={text}
             >
               <Icon className="w-4 h-4 text-yellow-400" />
@@ -82,8 +81,8 @@ const Footer = () => {
           ))}
         </div>
 
-        {/* Right: Social + Legal Links */}
-        <div className="flex flex-col gap-4 w-full md:w-1/3 md:items-end">
+        {/* Right: Social + Legal Links + Copyright */}
+        <div className="flex flex-col gap-4 w-full md:w-1/3 md:items-end items-center">
           {/* Social Icons */}
           <div className="flex gap-4">
             {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -99,27 +98,27 @@ const Footer = () => {
               </a>
             ))}
           </div>
-          {/* Legal Links */}
-          <div className="flex gap-4 text-xs text-gray-200">
-            <a
-              href="#"
-              className="hover:text-yellow-400 transition"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="hover:text-yellow-400 transition"
-            >
-              Terms of Service
-            </a>
+          {/* Legal Links + Copyright */}
+          <div className="flex flex-col gap-2 items-center md:items-end w-full">
+            <div className="flex gap-4 text-xs text-dark-900 dark:text-gray-200">
+              <a
+                href="#"
+                className="hover:text-yellow-400 dark:hover:text-yellow-400 transition"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="#"
+                className="hover:text-yellow-400 dark:hover:text-yellow-400 transition"
+              >
+                Terms of Service
+              </a>
+            </div>
+            <div className="text-xs text-dark-900 dark:text-gray-200 text-center md:text-right mt-2">
+              © {new Date().getFullYear()} Two Coins <span className="text-yellow-400">Corporation</span>. All rights reserved.
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Divider & Bottom Bar */}
-      <div className="border-t mt-8 pt-6 border-white/20 text-center text-gray-200 text-xs relative z-10">
-        © {new Date().getFullYear()} Two Coins Corporation. All rights reserved.
       </div>
 
       {/* Blob animation keyframes (if not already in your global CSS) */}

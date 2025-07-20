@@ -79,42 +79,34 @@ const ImageCarousel = () => {
   const current = carouselImages[currentIndex];
 
   return (
-    <section id="showcase" className="py-24 px-4 relative min-h-[500px] transition-colors duration-300 overflow-hidden">
-      {/* Blobs and radial gradient overlay */}
-      <div className="pointer-events-none absolute inset-0 z-0">
+    <section id="showcase" className="py-24 px-0 sm:px-4 relative min-h-[500px] transition-colors duration-300 overflow-hidden">
+      {/* Blobs only, no gradient overlay */}
+      <div className="pointer-events-none absolute inset-0 z-0 w-full max-w-full">
         <div
           ref={blob1Ref}
-          className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob"
+          className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-full max-h-full bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob"
         ></div>
         <div
           ref={blob2Ref}
-          className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000"
-        ></div>
-        {/* Radial gradient overlay */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.7) 100%)"
-          }}
+          className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] max-w-full max-h-full bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000"
         ></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto">
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="text-center mb-14">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-3 drop-shadow-lg text-white">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-3 drop-shadow-lg text-dark-900 dark:text-white">
             Our <span className="text-yellow-400">Showcase</span>
           </h2>
-          <p className="text-xl md:text-2xl font-light text-white/80">
+          <p className="text-xl md:text-2xl font-light text-slate-700 dark:text-white/80">
             A Glimpse of Our Quality Imports
           </p>
         </div>
 
         {/* Responsive flex: image and card stack on mobile, overlay on desktop */}
-        <div className="flex flex-col md:block">
+        <div className="flex flex-col md:block w-full max-w-full">
           <div
             className="
-              relative w-full
+              relative w-full max-w-full
               h-[40vh] min-h-[220px]
               md:h-[75vh] md:min-h-[500px] md:max-h-[900px]
               rounded-2xl overflow-hidden shadow-2xl border border-white/20 backdrop-blur-lg bg-white/10 dark:bg-black/20 select-none
@@ -141,7 +133,7 @@ const ImageCarousel = () => {
                   onClick={() => setLightboxOpen(true)}
                 />
                 {/* Desktop: Glass card overlay at bottom */}
-                <div className="hidden md:flex absolute left-0 right-0 bottom-0 bg-black/60 backdrop-blur-lg border-t border-white/20 px-6 md:px-10 py-4 flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                <div className="hidden md:flex absolute left-0 right-0 bottom-0 bg-white/90 dark:bg-black/80 backdrop-blur-lg border-t border-white/20 px-6 md:px-10 py-4 flex-col md:flex-row md:items-center gap-2 md:gap-6">
                   <div className="flex items-center gap-2 mb-1 md:mb-0">
                     <span className="inline-block px-3 py-1 rounded-full bg-yellow-400/80 text-black text-xs font-bold uppercase tracking-wider">
                       {image.category}
@@ -153,8 +145,8 @@ const ImageCarousel = () => {
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg md:text-2xl font-bold text-white">{image.alt}</h3>
-                    <p className="text-white/90 text-sm md:text-lg">{image.caption}</p>
+                    <h3 className="text-lg md:text-2xl font-bold text-dark-900 dark:text-white">{image.alt}</h3>
+                    <p className="text-slate-700 dark:text-white/90 text-sm md:text-lg">{image.caption}</p>
                   </div>
                 </div>
               </div>
@@ -171,14 +163,14 @@ const ImageCarousel = () => {
             {/* Navigation Arrows */}
             <button
               onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 dark:bg-black/30 hover:bg-yellow-400 text-white hover:text-black p-3 rounded-full z-20 shadow-lg transition-all backdrop-blur-lg border border-white/30"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/30 hover:bg-yellow-400 text-dark-900 dark:text-white hover:text-black p-3 rounded-full z-20 shadow-lg transition-all backdrop-blur-lg border border-white/30"
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 dark:bg-black/30 hover:bg-yellow-400 text-white hover:text-black p-3 rounded-full z-20 shadow-lg transition-all backdrop-blur-lg border border-white/30"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/30 hover:bg-yellow-400 text-dark-900 dark:text-white hover:text-black p-3 rounded-full z-20 shadow-lg transition-all backdrop-blur-lg border border-white/30"
               aria-label="Next slide"
             >
               <ChevronRight className="w-6 h-6" />
@@ -187,7 +179,7 @@ const ImageCarousel = () => {
             {/* Autoplay Control */}
             <button
               onClick={() => setAutoplay((a) => !a)}
-              className="absolute top-4 right-4 bg-white/20 dark:bg-black/30 hover:bg-yellow-400 text-white hover:text-black p-2 rounded-full z-20 shadow-md transition-all backdrop-blur-lg border border-white/30"
+              className="absolute top-4 right-4 bg-white/80 dark:bg-black/30 hover:bg-yellow-400 text-dark-900 dark:text-white hover:text-black p-2 rounded-full z-20 shadow-md transition-all backdrop-blur-lg border border-white/30"
               aria-label={autoplay ? "Pause autoplay" : "Play autoplay"}
             >
               {autoplay ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -211,8 +203,8 @@ const ImageCarousel = () => {
             </div>
           </div>
           {/* Mobile: Glass card below image */}
-          <div className="md:hidden mt-4 max-w-full">
-            <div className="bg-black/60 backdrop-blur-lg border border-white/20 rounded-2xl p-4 flex flex-col gap-2">
+          <div className="md:hidden mt-4 w-full max-w-full">
+            <div className="bg-white/90 dark:bg-black/80 backdrop-blur-lg border border-white/20 rounded-2xl p-4 flex flex-col gap-2">
               <div className="flex items-center gap-2 mb-1">
                 <span className="inline-block px-3 py-1 rounded-full bg-yellow-400/80 text-black text-xs font-bold uppercase tracking-wider">
                   {current.category}
@@ -223,8 +215,8 @@ const ImageCarousel = () => {
                   </span>
                 )}
               </div>
-              <h3 className="text-lg font-bold text-white">{current.alt}</h3>
-              <p className="text-white/90 text-sm">{current.caption}</p>
+              <h3 className="text-lg font-bold text-dark-900 dark:text-white">{current.alt}</h3>
+              <p className="text-slate-700 dark:text-white/90 text-sm">{current.caption}</p>
             </div>
           </div>
         </div>

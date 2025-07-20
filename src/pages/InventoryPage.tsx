@@ -39,7 +39,7 @@ const InventoryPage = () => {
       id="inventory"
       className="relative scroll-mt-20 pt-20 pb-16 min-h-screen transition-colors duration-300 overflow-hidden"
     >
-      {/* Blobs at all corners and center, plus radial gradient overlay */}
+      {/* Blobs at all corners and center, no gray/radial gradient overlay */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div
           ref={blobTL}
@@ -61,14 +61,6 @@ const InventoryPage = () => {
           ref={blobC}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-yellow-500/20 rounded-full filter blur-3xl opacity-30 animate-blob animation-delay-3000"
         ></div>
-        {/* Center-to-edges (radial) gradient overlay */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 100%)"
-          }}
-        ></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,11 +70,11 @@ const InventoryPage = () => {
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-2 h-10 rounded bg-yellow-400/80 hidden md:block"></div>
-              <h2 className="text-4xl md:text-5xl font-extrabold drop-shadow-lg text-white text-left">
+              <h2 className="text-4xl md:text-5xl font-extrabold drop-shadow-lg text-dark-900 dark:text-white text-left">
                 Our <span className="text-yellow-400">Inventory</span>
               </h2>
             </div>
-            <p className="text-xl md:text-2xl font-light text-white/80 text-left">
+            <p className="text-xl md:text-2xl font-light text-slate-700 dark:text-white/80 text-left">
               Find the perfect match for your needs from our quality selection.
             </p>
           </div>
@@ -97,7 +89,7 @@ const InventoryPage = () => {
                     ${
                       activeCategory === category
                         ? 'bg-yellow-500 text-black shadow-lg border-yellow-400'
-                        : 'bg-white/20 dark:bg-black/30 border-white/20 text-white hover:bg-yellow-400/30 hover:text-black'
+                        : 'bg-white/20 dark:bg-black/30 border-white/20 text-dark-900 dark:text-white hover:bg-yellow-400/30 hover:text-black'
                     }`}
                 >
                   {category}
@@ -115,7 +107,7 @@ const InventoryPage = () => {
               className="group bg-white/10 dark:bg-black/20 border border-white/20 shadow-2xl rounded-2xl backdrop-blur-lg flex flex-col transition hover:scale-105 hover:shadow-yellow-400/30 relative overflow-hidden"
             >
               {/* Image with hover zoom and animated border */}
-              <div className="relative w-full h-48 md:h-56 rounded-t-2xl overflow-hidden">
+              <div className="relative w-full h-48 md:h-56 rounded-t-2xl overflow-hidden group">
                 <img
                   src={vehicle.imageUrl}
                   alt={vehicle.name}
@@ -138,8 +130,8 @@ const InventoryPage = () => {
                     </span>
                   )}
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">{vehicle.name}</h3>
-                <p className="text-sm text-white/80 mb-2">{vehicle.description}</p>
+                <h3 className="text-lg font-bold text-dark-900 dark:text-white mb-1">{vehicle.name}</h3>
+                <p className="text-sm text-slate-700 dark:text-white/80 mb-2">{vehicle.description}</p>
                 <div className="flex-1"></div>
                 <button
                   onClick={() => setSelectedVehicle(vehicle)}

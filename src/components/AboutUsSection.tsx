@@ -38,15 +38,26 @@ export default function AboutUsSection() {
   return (
     <section
       id="about"
-      className="relative scroll-mt-20 min-h-screen transition-colors duration-300 overflow-hidden"
+      className="relative scroll-mt-32 pt-32 pb-16 min-h-screen transition-colors duration-300 overflow-hidden"
     >
-      {/* Full-bleed hero image and overlays */}
-      <img
-        src="/about-us-image.jpg"
-        alt="Two Coins Corporation team or storefront"
-        className="absolute inset-0 w-full h-full object-cover object-center z-0"
-        style={{ filter: "brightness(0.55)" }}
-      />
+      {/* Responsive background image: portrait for mobile, landscape for desktop */}
+      <picture>
+        <source
+          media="(max-width: 767px)"
+          srcSet="/about-us-image-mobile.jpg"
+        />
+        <img
+          src="/about-us-image.jpg"
+          alt="Two Coins Corporation team or storefront"
+          className="absolute inset-0 w-full h-full z-0 object-contain md:object-cover object-center"
+          style={{ filter: "brightness(0.85)" }}
+        />
+      </picture>
+      {/* Consistent solid overlay for text readability */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-white/60 dark:bg-black/60"></div>
+      </div>
+      {/* Blobs for accent */}
       <div
         ref={blob1Ref}
         className="absolute top-1/4 left-1/4 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob z-0"
@@ -55,7 +66,6 @@ export default function AboutUsSection() {
         ref={blob2Ref}
         className="absolute bottom-1/4 right-1/4 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000 z-0"
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/60 z-0"></div>
       <div 
         className="absolute inset-0 -z-10"
         style={{
@@ -67,26 +77,26 @@ export default function AboutUsSection() {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="max-w-3xl">
-          <h2 className="text-5xl md:text-7xl font-extrabold mb-4 mt-8 drop-shadow-lg text-white text-left">
+          <h2 className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg text-dark-900 dark:text-white text-left">
             The <span className="text-yellow-400">TwoCoins</span> Story.
           </h2>
-          <p className="text-xl md:text-2xl text-white/90 font-light text-left mb-6">
+          <p className="text-xl md:text-2xl font-light text-slate-700 dark:text-white/90 text-left mb-6">
             Trusted Partner for Japan Surplus Mini Vans, Trucks, and Equipment.
           </p>
           <div className="flex items-center gap-4 mt-2">
             <Quote className="w-8 h-8 text-yellow-400 animate-pulse" />
-            <span className="italic text-lg md:text-xl text-white/80">
+            <span className="italic text-lg md:text-xl text-slate-700 dark:text-white/80">
               “We’re not just selling vehicles; we’re empowering businesses and families across the nation.”
             </span>
           </div>
-          <div className="mt-2 text-sm text-white/60">
+          <div className="mt-2 text-sm text-slate-600 dark:text-white/60">
             — TwoCoins Marketing Corp. DVO, Davao City
           </div>
         </div>
 
         {/* Timeline/process as a vertical stepper (modern, rich, animated) */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 mt-20">
-          <h3 className="text-3xl font-bold mb-12 text-white text-left">Our 3-Step Quality Guarantee</h3>
+          <h3 className="text-3xl font-bold mb-12 text-dark-900 dark:text-white text-left">Our 3-Step Quality Guarantee</h3>
           <div className="relative flex flex-col gap-16">
             {/* Vertical line */}
             <div className="absolute left-6 top-0 bottom-0 w-1 bg-yellow-400/30 rounded-full z-0 hidden md:block"></div>
@@ -105,8 +115,8 @@ export default function AboutUsSection() {
                 </div>
                 {/* Step content */}
                 <div className="bg-white/10 dark:bg-black/20 rounded-2xl p-6 border border-white/20 shadow-xl backdrop-blur-lg w-full">
-                  <h4 className="text-xl font-semibold mb-2 text-white">{step.title}</h4>
-                  <p className="text-base text-white">{step.desc}</p>
+                  <h4 className="text-xl font-semibold mb-2 text-dark-900 dark:text-white">{step.title}</h4>
+                  <p className="text-base text-slate-700 dark:text-white">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -123,8 +133,8 @@ export default function AboutUsSection() {
               <div className="bg-yellow-300/20 p-4 rounded-full mb-5 transition group-hover:bg-yellow-300/30 z-10">
                 <card.icon className="w-14 h-14 text-yellow-400 group-hover:text-yellow-400 transition" aria-label={card.title + " icon"} />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-3 transition-colors z-10">{card.title}</h3>
-              <p className="text-white transition-colors z-10">{card.desc}</p>
+              <h3 className="text-2xl font-bold text-dark-900 dark:text-white mb-3 transition-colors z-10">{card.title}</h3>
+              <p className="text-slate-700 dark:text-white transition-colors z-10">{card.desc}</p>
             </div>
           ))}
         </div>
@@ -132,10 +142,10 @@ export default function AboutUsSection() {
         {/* CTA: No glass card, bold, left-aligned, yellow highlight */}
         <div className="relative z-10 mt-20 max-w-4xl mx-auto px-2">
           <div className="py-8">
-            <h4 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
+            <h4 className="text-2xl md:text-3xl font-extrabold text-dark-900 dark:text-white mb-2">
               Based in Davao City, <span className="text-yellow-400 font-extrabold">TwoCoins Marketing Corp. DVO</span>
             </h4>
-            <p className="text-lg md:text-xl text-white/90 leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-700 dark:text-white/90 leading-relaxed">
               Supplies quality mini dump trucks, Elf trucks, vans, and equipment—each rigorously inspected for excellence.<br />
               <span className="block mt-2 text-yellow-400 font-bold">Discover the difference of working with a team dedicated to your success. Contact us today to start your journey!</span>
             </p>

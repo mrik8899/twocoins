@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 
 // Animated counter component
 function AnimatedCounter({ end, duration = 1200, suffix = "" }: { end: number, duration?: number, suffix?: string }) {
@@ -49,6 +49,14 @@ export default function NewHeroSection() {
     }
   }, []);
 
+  const [contentLoaded, setContentLoaded] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContentLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Scroll to #showcase
   const handleScrollClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -76,26 +84,48 @@ export default function NewHeroSection() {
         playsInline
         aria-hidden="true"
         poster="/hero-poster.jpg"
-        style={{ opacity: 0.80 }}
+        preload="metadata"
       />
+
+      {/* Subtle Animated Blobs Background */}
+      <div className="absolute inset-0 z-20 pointer-events-none" aria-hidden="true">
+        <div className="blob-1 absolute bg-yellow-400/10 rounded-full mix-blend-screen filter blur-3xl opacity-60 w-56 h-56 md:w-80 md:h-80 animate-blob-move-1" />
+        <div className="blob-2 absolute bg-yellow-500/10 rounded-full mix-blend-screen filter blur-3xl opacity-60 w-64 h-64 md:w-96 md:h-96 animate-blob-move-2" />
+      </div>
 
       {/* Gradient overlay for warmth & depth */}
       <div
-        className="absolute inset-0 z-10 pointer-events-none"
+        className="absolute inset-0 z-30 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse 120% 80% at 60% 40%,rgba(255,233,80,0.13),rgba(0,0,0,0.78)), 
+          background: `radial-gradient(ellipse 120% 80% at 60% 40%,rgba(255,233,80,0.13),rgba(0,0,0,0.78)),
             linear-gradient(120deg,rgba(255,255,255,0.07) 0%,rgba(0,0,0,0.29) 100%)`
         }}
       />
 
-      {/* Main content: responsive position, left-aligned */}
-      <div className="
-        absolute z-40 flex flex-col items-start
-        w-full max-w-full md:max-w-lg
-        px-3 pl-4 md:pl-8
-        bottom-28 md:bottom-10
-        left-0 md:left-8
-      ">
+      {/* Subtle Vignette Effect */}
+      <div
+        className="absolute inset-0 z-30 pointer-events-none"
+        style={{
+          boxShadow: 'inset 0px 0px 100px rgba(0,0,0,0.75)'
+        }}
+      />
+
+      {/* Main content */}
+      <div
+        className={`
+          absolute z-40 flex flex-col items-start
+          w-full max-w-xs sm:max-w-md md:max-w-lg
+          
+          left-4
+          bottom-4
+          
+          md:bottom-10 md:left-6
+          md:p-0
+
+          transition-all duration-1000 ease-out 
+          ${contentLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+        `}
+      >
         {/* Brand block: logo left, text and badge right */}
         <div className="flex items-start mb-4 md:mb-6">
           <img
@@ -103,12 +133,17 @@ export default function NewHeroSection() {
             alt="Direct Japan Imports Logo"
             className="w-14 h-14 md:w-16 md:h-16 object-contain"
           />
-          <div className="flex flex-col justify-center ml-3">
-            <span className="text-xs md:text-lg font-extrabold tracking-widest uppercase text-white drop-shadow-lg">
+          {/* TWEAK: Added mt-2 for mobile, md:mt-0 to reset on desktop */}
+          <div className="flex flex-col justify-center ml-3 mt-2 md:mt-0">
+            <span className="text-xs md:text-lg font-extrabold tracking-widest uppercase text-white drop-shadow-lg overflow-hidden text-ellipsis whitespace-nowrap">
               DIRECT JAPAN IMPORTS.
             </span>
-            <span className="flex items-center gap-2 px-3 py-1 mt-1 rounded-full bg-gradient-to-r from-yellow-400/80 to-yellow-500/60 text-black font-bold text-xs uppercase shadow-md tracking-wide w-max">
-              <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 20 20">
+            <span className="flex items-center gap-1 px-2 py-0.5 mt-1 rounded-full 
+                   bg-gradient-to-r from-yellow-400/80 to-yellow-500/60 text-black 
+                   font-bold text-[0.625rem] uppercase shadow-md tracking-wide w-max
+                   min-w-0 flex-shrink-0 overflow-hidden
+                   md:px-3 md:py-1 md:text-xs md:gap-2">
+              <svg className="w-4 h-4 text-black md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20">
                 <circle cx="10" cy="10" r="10" />
                 <text x="10" y="14" textAnchor="middle" fontSize="9" fontWeight="bold" fill="white">VIP</text>
               </svg>
@@ -126,7 +161,11 @@ export default function NewHeroSection() {
           }}
         >
           <span className="pr-2">Experience Japan's Best</span>
-          <span className="text-yellow-400">Delivered.</span>
+          {/* Animated Gradient Text */}
+          <span className="
+            bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 
+            text-transparent bg-clip-text bg-[length:200%_auto] animate-text-gradient
+          ">Delivered.</span>
         </h1>
         {/* Subheadline */}
         <p className="text-xs md:text-lg text-neutral-300 text-left font-medium mb-4 md:mb-5" style={{
@@ -139,33 +178,37 @@ export default function NewHeroSection() {
         <div className="flex flex-row gap-2 md:gap-4 w-full justify-start mb-3 md:mb-4 flex-nowrap">
           <a
             href="#inventory"
-            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-black shadow border border-yellow-300/50 hover:scale-105 hover:shadow-lg transition transform whitespace-nowrap min-w-[90px] md:min-w-[120px] text-center"
+            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-black shadow border border-yellow-300/50 
+                       hover:scale-105 hover:shadow-lg transition-all transform ease-out duration-300
+                       animate-button-glow
+                       whitespace-nowrap min-w-[90px] md:min-w-[120px] text-center"
           >
             Browse Inventory
           </a>
           <a
             href="#contact"
-            className="group px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full border-2 border-yellow-400/60 text-yellow-100 bg-black/40 shadow hover:bg-yellow-400/10 hover:scale-105 transition flex items-center gap-2 whitespace-nowrap min-w-[90px] md:min-w-[120px] text-center"
+            className="group px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full border-2 border-yellow-400/60 text-yellow-100 bg-black/40 shadow hover:bg-yellow-400/10 
+                       hover:scale-105 transition-all flex items-center gap-2 whitespace-nowrap min-w-[90px] md:min-w-[120px] text-center"
           >
             <span>Request VIP Call</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
           </a>
         </div>
-        {/* Numbers/stats: slightly smaller */}
-        <div className="flex flex-row gap-4 md:gap-8">
-          <div className="flex flex-row items-center gap-1 min-w-[90px] md:min-w-[120px]">
+        {/* Numbers/stats: stack vertically on mobile, row on desktop */}
+        <div className="flex flex-col md:flex-row gap-2 md:gap-8 w-full">
+          <div key="imported-stats" className="flex flex-row items-center gap-1 w-full md:w-auto">
             <span className="text-lg md:text-2xl text-yellow-400 font-extrabold tracking-tight">
               <AnimatedCounter end={6200} suffix="+" />
             </span>
             <span className="text-xs md:text-sm text-white/80 font-medium ml-1">Imported</span>
           </div>
-          <div className="flex flex-row items-center gap-1 min-w-[90px] md:min-w-[120px] border-l border-white/20 pl-2 md:pl-4">
+          <div key="years-stats" className="flex flex-row items-center gap-1 w-full md:w-auto md:border-l border-white/20 md:pl-4">
             <span className="text-lg md:text-2xl text-yellow-400 font-extrabold tracking-tight">
               <AnimatedCounter end={16} suffix="+" />
             </span>
             <span className="text-xs md:text-sm text-white/80 font-medium ml-1">Years</span>
           </div>
-          <div className="flex flex-row items-center gap-1 min-w-[90px] md:min-w-[120px] border-l border-white/20 pl-2 md:pl-4">
+          <div key="satisfaction-stats" className="flex flex-row items-center gap-1 w-full md:w-auto md:border-l border-white/20 md:pl-4">
             <span className="text-lg md:text-2xl text-yellow-400 font-extrabold tracking-tight">
               <AnimatedCounter end={98} suffix="%" />
             </span>
@@ -181,15 +224,23 @@ export default function NewHeroSection() {
         className="absolute left-1/2 bottom-3 md:bottom-6 z-50 -translate-x-1/2 flex flex-col items-center cursor-pointer group"
         aria-label="Scroll to showcase"
       >
-        <span className="text-white/70 text-xs uppercase tracking-wide mb-2 group-hover:text-yellow-300 transition">Scroll</span>
         <div className="flex flex-col items-center gap-2 h-8 w-4">
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-scroll-dot group-hover:bg-yellow-300" />
           <div className="w-1.5 h-1.5 rounded-full bg-yellow-300/70" />
           <div className="w-1 h-1 rounded-full bg-yellow-200/60" />
         </div>
+        {/* Chevron Down icon for scroll indicator */}
+        <ChevronDown className="w-4 h-4 text-white/70 mt-1 animate-bounce-y group-hover:text-yellow-300 transition-colors" />
       </a>
 
       <style>{`
+        /* Font smoothing for crisper text rendering */
+        html, body {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeLegibility;
+        }
+
         @keyframes scrollDot {
           0% { opacity: 0.7; transform: translateY(0); }
           50% { opacity: 1; transform: translateY(10px); }
@@ -197,6 +248,73 @@ export default function NewHeroSection() {
         }
         .animate-scroll-dot {
           animation: scrollDot 1.4s infinite;
+        }
+
+        /* Animated Gradient Text Keyframes */
+        @keyframes text-gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-text-gradient {
+          animation: text-gradient 3s ease-in-out infinite;
+        }
+
+        /* Blob Animation Keyframes */
+        .blob-1 {
+          top: 10%;
+          left: 5%;
+          animation: blob-move-1 15s ease-in-out infinite alternate;
+        }
+        .blob-2 {
+          bottom: 20%;
+          right: 15%;
+          animation: blob-move-2 18s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes blob-move-1 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(-30px, 20px) scale(1.1);
+          }
+          66% {
+            transform: translate(30px, -20px) scale(0.9);
+          }
+        }
+        @keyframes blob-move-2 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(25px, -15px) scale(0.95);
+          }
+          66% {
+            transform: translate(-25px, 15px) scale(1.05);
+          }
+        }
+
+        /* Button Glow/Pulse Keyframes */
+        @keyframes button-glow {
+          0% { box-shadow: 0 0 0px rgba(255, 255, 0, 0.4); }
+          50% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.8); }
+          100% { box-shadow: 0 0 0px rgba(255, 255, 0, 0.4); }
+        }
+        .animate-button-glow {
+          animation: button-glow 2s ease-in-out infinite;
+        }
+
+        /* Vertical Bounce for Scroll Icon */
+        @keyframes bounce-y {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(3px);
+          }
+        }
+        .animate-bounce-y {
+          animation: bounce-y 1.5s infinite;
         }
       `}</style>
     </section>
