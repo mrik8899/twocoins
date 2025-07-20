@@ -131,7 +131,6 @@ function App() {
           <InventoryPage />
           <AboutUsSection />
           <TestimonialsSection />
-          <FeaturesSection />
           <ContactSection />
         </main>
         <Footer />

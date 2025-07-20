@@ -31,15 +31,11 @@ const features = [
 ];
 
 const FeaturesSection = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
-
     let mm = gsap.matchMedia();
 
     mm.add("(min-width: 1024px)", () => {
@@ -52,19 +48,7 @@ const FeaturesSection = () => {
           scrub: true,
         },
       });
-
-      videoElement.onloadedmetadata = () => {
-        gsap.to(videoElement, {
-          currentTime: videoElement.duration,
-          scrollTrigger: {
-            trigger: triggerRef.current,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: true,
-          },
-        });
-      };
-
+      
       gsap.utils.toArray('.feature-card').forEach((card: any) => {
         gsap.fromTo(card,
           { opacity: 0, y: 50 },
@@ -109,17 +93,30 @@ const FeaturesSection = () => {
 
   return (
     <div ref={triggerRef} id="features" className="relative scroll-mt-20">
-      <section ref={sectionRef} className="relative w-full overflow-hidden flex items-start min-h-[600px]">
-        <video
-          ref={videoRef}
-          src="/features-video.mp4"
-          className="absolute inset-0 w-full h-full object-cover"
-          playsInline
-          muted
-          loop
-          autoPlay
-        ></video>
-        {/* Blobs only, no gradient overlay */}
+      <section ref={sectionRef} className="relative w-full overflow-hidden flex items-start md:min-h-[600px]">
+        {/* START: ONLY IMAGE CODE MODIFIED HERE */}
+        <div className="absolute inset-0 w-full h-full z-0"> {/* This container ensures proper layering */}
+          <picture>
+            {/* Source for mobile/smaller screens */}
+            <source
+              media="(max-width: 767px)" // Apply this source for screens up to 767px wide
+              srcSet="/features-mobile.jpg" // Your 720x1080 (or 1080x1440 if keeping) image
+            />
+            {/* Default <img> for desktop and if no source matches */}
+            <img
+              src="/features-desktop.jpg" // Your 1920x1080 image for desktop
+              alt="TwoCoins Features Background" // Alt text remains from your original code
+              // object-cover ensures it fills the container. object-center is explicitly set for clarity.
+              className="absolute inset-0 w-full h-full object-cover object-center" 
+              style={{ filter: "brightness(0.85)" }} // Your consistent brightness filter
+            />
+          </picture>
+          {/* CONSISTENT: Solid color overlay for readability (bg-white/60 dark:bg-black/60) */}
+          <div className="absolute inset-0 bg-white/60 dark:bg-black/60"></div>
+        </div>
+        {/* END: ONLY IMAGE CODE MODIFIED HERE */}
+
+        {/* Blobs (these were already z-0, ensuring they are above the image/overlay due to source order) */}
         <div className="pointer-events-none absolute inset-0 z-0 w-full max-w-full">
           <div
             className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] max-w-full max-h-full bg-yellow-500/20 rounded-full filter blur-3xl opacity-40 animate-blob"
@@ -128,6 +125,7 @@ const FeaturesSection = () => {
             className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] max-w-full max-h-full bg-primary-500/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-4000"
           ></div>
         </div>
+        {/* Content (relative positioning helps it stay on top of absolute background elements) */}
         <div ref={contentRef} className="relative w-full p-4 md:p-8">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="lg:pr-8">

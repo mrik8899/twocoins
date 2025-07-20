@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Menu, X } from "lucide-react";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "./ThemeToggle"; 
 
 type NavLink = { href: string; label: string };
 const navLinks: NavLink[] = [
   { href: "#home", label: "Home" },
   { href: "#features", label: "Why Choose Us" },
-  { href: "#inventory", label: "Our Inventory" }, // Corrected label from '#inventory' to 'Our Inventory'
+  { href: "#inventory", label: "Our Inventory" },
   { href: "#about", label: "About Us" },
   { href: "#contact", label: "Contact" },
 ];
@@ -49,7 +49,6 @@ const MobileMenu = ({
   </div>
 );
 
-// Define the props type for the Header component
 interface HeaderProps {
   isLoading: boolean; 
 }
@@ -77,13 +76,11 @@ const Header = ({ isLoading }: HeaderProps) => {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Effect to ensure mobile menu is closed if loading state changes
   useEffect(() => {
     if (isLoading && mobileOpen) {
       setMobileOpen(false);
     }
   }, [isLoading, mobileOpen]);
-
 
   return (
     <header 
@@ -124,16 +121,17 @@ const Header = ({ isLoading }: HeaderProps) => {
             <button
               onClick={() => !isLoading && setMobileOpen(true)}
               disabled={isLoading}
-              className={`p-2 rounded-md shadow border transition mr-2
-                         ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
-                         
-                         /* The glassmorphism styles are applied consistently */
-                         bg-white/80 dark:bg-dark-900/80 backdrop-blur-lg 
-                         border-gray-300 dark:border-gray-700 
-                         
-                         hover:bg-yellow-100 dark:hover:bg-dark-700`} 
+              className={`p-2 rounded-md transition mr-2
+                          ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
+                          
+                          /* --- MODIFICATION START for Hamburger Button Background/Border --- */
+                          /* Remove explicit background and border for default state */
+                          bg-transparent border-transparent shadow-none 
+                          
+                          /* Apply hover background, which will now only show on hover */
+                          hover:bg-yellow-100 dark:hover:bg-dark-700`} 
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-6 h-6 text-dark-900 dark:text-white" /> 
             </button>
           </div>
         </div>

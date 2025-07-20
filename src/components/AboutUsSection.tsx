@@ -11,9 +11,21 @@ const values = [
 ];
 
 const steps = [
-  { icon: Search, title: "Direct Sourcing", desc: "We personally select top-grade units directly from our trusted network in Japan." },
-  { icon: Wrench, title: "Rigorous Inspection", desc: "Each vehicle undergoes a comprehensive mechanical and cosmetic inspection in our facility." },
-  { icon: PackageCheck, title: "Client Delivery", desc: "We ensure a smooth, transparent, and timely delivery process, right to your doorstep." },
+  { 
+    icon: Search, 
+    title: "Direct Sourcing", 
+    desc: "We meticulously handpick top-grade vehicles and equipment directly from our exclusive and trusted network in Japan. This direct sourcing approach eliminates middlemen, ensuring you receive unparalleled quality and competitive pricing, straight from the source." 
+  },
+  { 
+    icon: Wrench, 
+    title: "Rigorous Inspection", 
+    desc: "Before any unit leaves our facility, it undergoes an exhaustive multi-point inspection by our certified technicians. This includes a thorough check of mechanical integrity, engine performance, chassis, and detailed cosmetic assessment, guaranteeing reliability and your peace of mind." 
+  },
+  { 
+    icon: PackageCheck, 
+    title: "Client Delivery", 
+    desc: "Once cleared, we manage a seamless, transparent, and timely delivery. From comprehensive documentation to efficient logistics, your premium Japanese vehicle is carefully transported, ensuring it arrives safely and punctually right to your doorstep, nationwide." 
+  },
 ];
 
 export default function AboutUsSection() {
@@ -44,12 +56,13 @@ export default function AboutUsSection() {
       <picture>
         <source
           media="(max-width: 767px)"
-          srcSet="/about-us-image-mobile.jpg"
+          srcSet="/about-us-mobile.jpg"
         />
         <img
-          src="/about-us-image.jpg"
+          src="/about-us-desktop.jpg"
           alt="Two Coins Corporation team or storefront"
-          className="absolute inset-0 w-full h-full z-0 object-contain md:object-cover object-center"
+          // Removed object-[75%_center] from here so desktop uses default object-center
+          className="about-us-background-image absolute inset-0 w-full h-full z-0 object-cover" 
           style={{ filter: "brightness(0.85)" }}
         />
       </picture>
@@ -113,8 +126,8 @@ export default function AboutUsSection() {
                     <div className="w-3 h-3 rounded-full bg-yellow-400/70 my-2 hidden md:block"></div>
                   )}
                 </div>
-                {/* Step content */}
-                <div className="bg-white/10 dark:bg-black/20 rounded-2xl p-6 border border-white/20 shadow-xl backdrop-blur-lg w-full">
+                {/* Step content - EDITED OPACITY HERE */}
+                <div className="bg-white/30 dark:bg-black/40 rounded-2xl p-6 border border-white/30 shadow-xl backdrop-blur-lg w-full">
                   <h4 className="text-xl font-semibold mb-2 text-dark-900 dark:text-white">{step.title}</h4>
                   <p className="text-base text-slate-700 dark:text-white">{step.desc}</p>
                 </div>
@@ -153,7 +166,19 @@ export default function AboutUsSection() {
         </div>
       </div>
 
+      {/* --- ADDED/MODIFIED STYLE BLOCK FOR RESPONSIVE OBJECT-POSITION --- */}
       <style>{`
+        /* Default object-position for desktop (or when no specific media query matches) */
+        .about-us-background-image {
+          object-position: center; /* Ensures desktop image is centered */
+        }
+        /* Override object-position for mobile screens */
+        @media (max-width: 767px) {
+          .about-us-background-image {
+            object-position: 75% center; /* Applies this only for mobile */
+          }
+        }
+
         @keyframes blob {
           0%, 100% { transform: scale(1) translate(0, 0); }
           33% { transform: scale(1.1, 0.9) translate(20px, -10px); }
@@ -169,6 +194,7 @@ export default function AboutUsSection() {
           animation: fadeInUp 1s cubic-bezier(0.4,0,0.2,1) both;
         }
       `}</style>
+      {/* --- END OF MODIFIED STYLE BLOCK --- */}
     </section>
   );
 }

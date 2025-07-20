@@ -11,15 +11,15 @@ import {
 import { useRef, useEffect } from "react";
 
 const ContactSection = () => {
-  // Blobs
+  // Blobs for parallax effect
   const blobTL = useRef<HTMLDivElement>(null);
   const blobBR = useRef<HTMLDivElement>(null);
 
-  // Parallax blobs (mobile-friendly, smaller on mobile)
+  // Parallax for the blobs (mobile-friendly, smaller on mobile)
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const maxBlobOffset = 40;
+      const maxBlobOffset = 40; // Limit parallax movement for subtlety
       if (blobTL.current) blobTL.current.style.transform = `translateY(${Math.min(scrollY * 0.04, maxBlobOffset)}px) scale(1.05)`;
       if (blobBR.current) blobBR.current.style.transform = `translateY(-${Math.min(scrollY * 0.03, maxBlobOffset)}px) scale(1.05)`;
     };
@@ -32,18 +32,26 @@ const ContactSection = () => {
       id="contact"
       className="relative scroll-mt-20 pt-20 pb-16 min-h-screen transition-colors duration-300 overflow-hidden"
     >
-      {/* Background image - increased brightness for better visibility */}
-      <img
-        src="/contact-us-image.jpg"
-        alt="Contact Us"
-        className="absolute inset-0 w-full h-full object-cover object-center z-0"
-        style={{ filter: "brightness(0.7)" }}
-      />
-      {/* Full-section overlay for text readability - reduced opacity */}
+      {/* Responsive Background Image */}
+      <picture>
+        <source
+          media="(max-width: 767px)" // For screens up to 767px wide (mobile)
+          srcSet="/contact-us-mobile.jpg"
+        />
+        <img
+          src="/contact-us-desktop.jpg" // Default image for desktop and larger screens
+          alt="Two Coins Corporation Contact Us Background"
+          className="contact-background-image absolute inset-0 w-full h-full object-cover z-0"
+          style={{ filter: "brightness(0.7)" }} // Adjust brightness for text readability
+        />
+      </picture>
+
+      {/* Full-section overlay for text readability */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-white/50 dark:bg-black/50"></div>
       </div>
-      {/* Blobs for accent, smaller on mobile - REPOSITIONED TO CENTER */}
+
+      {/* Blobs for accent */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div
           ref={blobTL}
@@ -55,8 +63,9 @@ const ContactSection = () => {
         ></div>
       </div>
 
+      {/* Main Content */}
       <div className="relative z-20 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
-        {/* Heading styled exactly like Features section */}
+        {/* Section Heading */}
         <div className="mb-16 text-center">
           <h2 className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg text-dark-900 dark:text-white">
             Let's <span className="text-yellow-400">Connect</span>
@@ -66,8 +75,9 @@ const ContactSection = () => {
           </p>
         </div>
 
-        {/* Primary Contact Methods - Featured prominently */}
+        {/* Primary Contact Methods */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Call Us Card */}
           <a
             href="tel:+639392136599"
             className="group rounded-2xl p-8 border border-white/30 shadow-2xl bg-white/30 dark:bg-black/10 backdrop-blur-md hover:scale-105 transition-all duration-300 cursor-pointer"
@@ -82,6 +92,7 @@ const ContactSection = () => {
             </div>
           </a>
 
+          {/* Email Us Card */}
           <a
             href="mailto:info@twocoinsvehicles.com"
             className="group rounded-2xl p-8 border border-white/30 shadow-2xl bg-white/30 dark:bg-black/10 backdrop-blur-md hover:scale-105 transition-all duration-300 cursor-pointer"
@@ -96,6 +107,7 @@ const ContactSection = () => {
             </div>
           </a>
 
+          {/* Live Chat Card */}
           <a
             href="https://www.facebook.com/TwoCoins.corp.dvo"
             target="_blank"
@@ -117,6 +129,7 @@ const ContactSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Info Cards */}
           <div className="lg:col-span-1 space-y-6">
+            {/* Office Address Card */}
             <div className="rounded-2xl p-6 border border-white/30 shadow-2xl bg-white/30 dark:bg-black/10 backdrop-blur-md">
               <div className="flex items-center gap-3 mb-4">
                 <div className="bg-yellow-400/20 p-3 rounded-full">
@@ -125,7 +138,7 @@ const ContactSection = () => {
                 <h3 className="text-lg font-bold text-black dark:text-yellow-400">Visit Our Office</h3>
               </div>
               <a
-                href="https://maps.google.com/?q=Two Coins Corporation, Davao City, Philippines"
+                href="https://maps.google.com/?q=Two Coins Corporation, Davao City, Philippines" // Consider updating this to a more precise Google Maps link
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-dark-900 dark:text-white hover:underline block"
@@ -135,6 +148,7 @@ const ContactSection = () => {
               </a>
             </div>
 
+            {/* Business Hours Card */}
             <div className="rounded-2xl p-6 border border-white/30 shadow-2xl bg-white/30 dark:bg-black/10 backdrop-blur-md">
               <div className="flex items-center gap-3 mb-4">
                 <div className="bg-yellow-400/20 p-3 rounded-full">
@@ -149,6 +163,7 @@ const ContactSection = () => {
               </div>
             </div>
 
+            {/* Service Areas Card */}
             <div className="rounded-2xl p-6 border border-white/30 shadow-2xl bg-white/30 dark:bg-black/10 backdrop-blur-md">
               <div className="flex items-center gap-3 mb-4">
                 <div className="bg-yellow-400/20 p-3 rounded-full">
@@ -164,14 +179,14 @@ const ContactSection = () => {
             </div>
           </div>
 
-          {/* Map - Takes up more space */}
+          {/* Embedded Map */}
           <div className="lg:col-span-2">
             <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/30 bg-white/30 dark:bg-black/10 backdrop-blur-md h-full min-h-[400px]">
               <div className="w-full h-full relative">
                 {/* Dark overlay for the map in dark mode */}
                 <div className="absolute inset-0 bg-black/40 dark:bg-black/60 pointer-events-none z-10"></div>
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.7995025420473!2d125.46104547475694!3d6.917437693082141!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f9a7c78e9d78dd%3A0xdbf6fd34402a77aa!2sTwo%20Coins%20Corporation!5e3!3m2!1sen!2s!4v1753004472620!5m2!1sen!2s"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.7995025420473!2d125.46104547475694!3d6.917437693082141!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f9a7c78e9d78dd%3A0xdbf6fd34402a77aa!2sTwo%20Coins%20Corporation!5e3!3m2!1sen!2s!4v1753004472620!5m2!1sen!2s" // Consider updating this to an actual Google Maps embed URL
                   width="100%"
                   height="100%"
                   style={{ border: 0, minHeight: '400px', filter: 'contrast(0.9) brightness(0.9)' }}
@@ -217,8 +232,19 @@ const ContactSection = () => {
         </div>
       </div>
 
-      {/* Blob animation keyframes (if not already in your global CSS) */}
+      {/* Styles for responsive object-position and blob animations */}
       <style>{`
+        /* Default object-position for desktop (or when no specific media query matches) */
+        .contact-background-image {
+          object-position: center; /* Ensures desktop image is centered by default */
+        }
+        /* Override object-position for mobile screens */
+        @media (max-width: 767px) {
+          .contact-background-image {
+            object-position: 75% center; /* Adjust focus for mobile image */
+          }
+        }
+
         @keyframes blob {
           0%, 100% { transform: scale(1) translate(0, 0); }
           33% { transform: scale(1.1, 0.9) translate(20px, -10px); }
