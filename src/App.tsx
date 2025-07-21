@@ -17,23 +17,24 @@ const LoadingScreen: React.FC = () => {
   const logoSizeClasses = "w-28 h-28 md:w-36 md:h-36";
   const landingBufferPx = 20;
 
-  // CHANGED: Initial state for logoStaticY from '50%' to '30%'
+  // Initial state for logoStaticY from '50%' to '30%'
   const [logoStaticY, setLogoStaticY] = useState('30%');
 
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const estimatedLogoHeight = window.innerWidth < 768 ? 112 : 144;
+  const estimatedLogoHeight = window.innerWidth < 768 ? 112 : 144; // Approx values for calculation
 
   useEffect(() => {
     const calculateStaticPosition = () => {
       if (progressBarRef.current) {
         const progressBarRect = progressBarRef.current.getBoundingClientRect();
-
+        // Calculate position based on the progress bar's top, logo height, and a buffer
         const logoTopPosition = progressBarRect.top - estimatedLogoHeight - landingBufferPx;
         setLogoStaticY(`${logoTopPosition}px`);
       }
     };
 
-    calculateStaticPosition();
+    calculateStaticPosition(); // Initial calculation
+    // Recalculate if window resizes, and also a small timeout for initial render accuracy
     const initialCalcTimer = setTimeout(calculateStaticPosition, 100);
     window.addEventListener('resize', calculateStaticPosition);
 
@@ -41,7 +42,7 @@ const LoadingScreen: React.FC = () => {
         window.removeEventListener('resize', calculateStaticPosition);
         clearTimeout(initialCalcTimer);
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center text-white p-4 overflow-hidden loading-screen-gradient">
@@ -56,12 +57,10 @@ const LoadingScreen: React.FC = () => {
           left: '50%',
           top: logoStaticY,
           transform: 'translateX(-50%)',
-          animationDelay: '0s'
+          animationDelay: '0s' // First logo starts immediately
         }}
       >
-        {/* Spinner rings and images remain the same */}
         <div className="spinner-rings"></div>
-
         <img
           src="/logo1.png"
           alt="Two Coins Corporation Logo 1"
@@ -75,12 +74,10 @@ const LoadingScreen: React.FC = () => {
           left: '50%',
           top: logoStaticY,
           transform: 'translateX(-50%)',
-          animationDelay: '0.3s'
+          animationDelay: '0.3s' // Second logo slightly delayed for layered effect
         }}
       >
-        {/* Spinner rings and images remain the same */}
         <div className="spinner-rings"></div>
-
         <img
           src="/logo1.png"
           alt="Two Coins Corporation Logo 2"
@@ -102,11 +99,13 @@ const LoadingScreen: React.FC = () => {
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const loadingDuration = 3000;
+  const loadingDuration = 3000; // Duration for the progress bar animation
 
   useEffect(() => {
+    // Set CSS variable for animation duration
     document.documentElement.style.setProperty('--loading-duration', `${loadingDuration}ms`);
 
+    // Hide loading screen after duration + a small buffer
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, loadingDuration + 500);
@@ -114,14 +113,14 @@ function App() {
     return () => clearTimeout(timer);
   }, [loadingDuration]);
 
-  // --- START: ADDED CODE FOR DEV TOOLS DETERRENTS ---
+  // --- START: GLOBAL DEV TOOLS DETERRENTS ---
   useEffect(() => {
     // Disables right-click context menu
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
     };
 
-    // Disables specific keyboard shortcuts
+    // Disables specific keyboard shortcuts (F12, Ctrl/Cmd+Shift+I/J/C, Ctrl/Cmd+U/S)
     const handleKeyDown = (e: KeyboardEvent) => {
       // F12 key
       if (e.key === 'F12') {
@@ -158,8 +157,51 @@ function App() {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []); // Empty dependency array means this runs once on mount and cleans up on unmount
-  // --- END: ADDED CODE FOR DEV TOOLS DETERRENTS ---
+  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
+  // --- END: GLOBAL DEV TOOLS DETERRENTS ---
+
+  // --- START: GLOBAL URL HIDING / SMOOTH SCROLL BEHAVIOR ---
+  // This useEffect will listen for all clicks on the document.
+  // If the click is on an anchor tag with an internal hash link,
+  // it will prevent the default (URL change) and smoothly scroll.
+  useEffect(() => {
+    const handleGlobalAnchorClick = (e: MouseEvent) => {
+      // Find the closest ancestor of the clicked element that is an anchor tag.
+      // This handles cases where child elements inside the <a> are clicked (e.g., a span inside a link).
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a');
+
+      // Check if:
+      // 1. An anchor tag was clicked (or a descendant of it).
+      // 2. The anchor's href attribute exists and starts with '#' (indicating an internal section link).
+      if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
+        e.preventDefault(); // Prevent the default browser behavior (changing the URL hash).
+
+        // Extract the section ID from the href (e.g., from "#contact" get "contact").
+        const targetId = anchor.getAttribute('href')?.substring(1); 
+        if (targetId) {
+          // Find the target element by its ID.
+          const el = document.getElementById(targetId);
+          if (el) {
+            // Smoothly scroll the target element into view.
+            el.scrollIntoView({ behavior: 'smooth' });
+            // IMPORTANT: No window.history.pushState() or window.location.hash = ... here.
+            // This is the core part that ensures the URL in the address bar remains the base URL
+            // (e.g., "https://twocoins.vercel.app/") and does not show "#contact" or "/contact".
+          }
+        }
+      }
+    };
+
+    // Attach the global click listener to the entire document.
+    document.addEventListener('click', handleGlobalAnchorClick);
+
+    // Clean up the event listener when the App component unmounts to prevent memory leaks.
+    return () => {
+      document.removeEventListener('click', handleGlobalAnchorClick);
+    };
+  }, []); // An empty dependency array means this effect runs once after the initial render and cleans up on unmount.
+  // --- END: GLOBAL URL HIDING / SMOOTH SCROLL BEHAVIOR ---
 
   return (
     <>

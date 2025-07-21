@@ -43,7 +43,7 @@ export default function NewHeroSection() {
   useParallax(headlineRef as React.RefObject<HTMLElement>, 0.06);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  
+
   // State to track if video is ready to play
   const [isVideoReady, setIsVideoReady] = useState(false);
 
@@ -70,14 +70,15 @@ export default function NewHeroSection() {
     setIsVideoReady(true);
   };
 
-  // Scroll to #showcase
-  const handleScrollClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const el = document.getElementById("showcase");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  // --- REMOVED: The handleScrollClick function is no longer needed here
+  //              as global scroll handling is now in App.tsx.
+  // const handleScrollClick = (e: React.MouseEvent) => {
+  //   e.preventDefault();
+  //   const el = document.getElementById("showcase");
+  //   if (el) {
+  //     el.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
 
   return (
     <section
@@ -91,7 +92,7 @@ export default function NewHeroSection() {
       {!isVideoReady && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10">
           {/* Your actual spinner component or SVG */}
-          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-yellow-400"></div> 
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-yellow-400"></div>
         </div>
       )}
       <video
@@ -142,14 +143,14 @@ export default function NewHeroSection() {
         className={`
           absolute z-40 flex flex-col items-start
           w-full max-w-xs sm:max-w-md md:max-w-lg
-          
+
           left-4
           bottom-4
-          
+
           md:bottom-10 md:left-6
           md:p-0
 
-          transition-all duration-1000 ease-out 
+          transition-all duration-1000 ease-out
           ${contentLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
         `}
       >
@@ -165,8 +166,8 @@ export default function NewHeroSection() {
             <span className="text-xs md:text-lg font-extrabold tracking-widest uppercase text-white drop-shadow-lg overflow-hidden text-ellipsis whitespace-nowrap">
               DIRECT JAPAN IMPORTS.
             </span>
-            <span className="flex items-center gap-1 px-2 py-0.5 mt-1 rounded-full 
-                      bg-gradient-to-r from-yellow-400/80 to-yellow-500/60 text-black 
+            <span className="flex items-center gap-1 px-2 py-0.5 mt-1 rounded-full
+                      bg-gradient-to-r from-yellow-400/80 to-yellow-500/60 text-black
                       font-bold text-[0.625rem] uppercase shadow-md tracking-wide w-max
                       min-w-0 flex-shrink-0 overflow-hidden
                       md:px-3 md:py-1 md:text-xs md:gap-2">
@@ -190,7 +191,7 @@ export default function NewHeroSection() {
           <span className="pr-2">Experience Japan's Best</span>
           {/* Animated Gradient Text */}
           <span className="
-            bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 
+            bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500
             text-transparent bg-clip-text bg-[length:200%_auto] animate-text-gradient
           ">Delivered.</span>
         </h1>
@@ -205,7 +206,8 @@ export default function NewHeroSection() {
         <div className="flex flex-row gap-2 md:gap-4 w-full justify-start mb-3 md:mb-4 flex-nowrap">
           <a
             href="#inventory"
-            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-black shadow border border-yellow-300/50 
+            // REMOVED: onClick={handleScrollClick}
+            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-black shadow border border-yellow-300/50
                            hover:scale-105 hover:shadow-lg transition-all transform ease-out duration-300
                            animate-button-glow
                            whitespace-nowrap min-w-[90px] md:min-w-[120px] text-center"
@@ -214,7 +216,8 @@ export default function NewHeroSection() {
           </a>
           <a
             href="#contact"
-            className="group px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full border-2 border-yellow-400/60 text-yellow-100 bg-black/40 shadow hover:bg-yellow-400/10 
+            // REMOVED: onClick={handleScrollClick}
+            className="group px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-base font-bold rounded-full border-2 border-yellow-400/60 text-yellow-100 bg-black/40 shadow hover:bg-yellow-400/10
                            hover:scale-105 transition-all flex items-center gap-2 whitespace-nowrap min-w-[90px] md:min-w-[120px] text-center"
           >
             <span>Request VIP Call</span>
@@ -247,7 +250,7 @@ export default function NewHeroSection() {
       {/* Scroll indicator: always at the bottom */}
       <a
         href="#showcase"
-        onClick={handleScrollClick}
+        // REMOVED: onClick={handleScrollClick}
         className="absolute left-1/2 bottom-3 md:bottom-6 z-50 -translate-x-1/2 flex flex-col items-center cursor-pointer group"
         aria-label="Scroll to showcase"
       >
